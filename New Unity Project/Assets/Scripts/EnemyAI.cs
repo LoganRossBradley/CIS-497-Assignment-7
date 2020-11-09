@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/* 
+ * logan Ross
+ * assignment 7
+ * manages enemy movement
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

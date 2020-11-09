@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿/* 
+ * logan Ross
+ * assignment 7
+ * allows the cammera to be moved around the focalpoint
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
