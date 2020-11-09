@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SpawnManagerX : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public GameObject powerupPrefab;
+    public Text txtGameOver;
+    public Text txtWave;
 
     private float spawnRangeX = 10;
     private float spawnZMin = 15; // set min spawn Z
@@ -13,20 +17,46 @@ public class SpawnManagerX : MonoBehaviour
 
     public int enemyCount;
     public int waveCount = 1;
+    public int enemyPoints = 0;
 
 
-    public GameObject player; 
+    public GameObject player;
+
+    private void Start()
+    {
+        Time.timeScale = 0;
+    }
 
     // Update is called once per frame
     void Update()
     {
-        enemyCount = GameObject.FindGameObjectsWithTag("Powerup").Length;
+        enemyCount = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
-        if (enemyCount == 0)
+        if (enemyCount == 0 && waveCount != 10)
         {
-            SpawnEnemyWave(waveCount);
+            SpawnEnemyWave(waveCount + 1);
         }
 
+        if(Input.GetKeyDown(KeyCode.Space) && Time.timeScale == 0)
+        {
+            Time.timeScale = 1;
+            txtGameOver.text = "";
+        }
+        else if(Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+        if(enemyPoints == waveCount)
+        {
+            txtGameOver.text = "You lose :( \n press 'R' to restart";
+        }
+        else if(waveCount == 10 && enemyCount == 0)
+        {
+            txtGameOver.text = "You Win! \n press 'R' to restart";
+        }
+
+     
     }
 
     // Generate random spawn position for powerups and enemy balls
@@ -49,12 +79,13 @@ public class SpawnManagerX : MonoBehaviour
         }
 
         // Spawn number of enemy balls based on wave number
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < enemiesToSpawn; i++)
         {
             Instantiate(enemyPrefab, GenerateSpawnPosition(), enemyPrefab.transform.rotation);
         }
 
         waveCount++;
+        txtWave.text = "Wave: " + waveCount;
         ResetPlayerPosition(); // put player back at start
 
     }
